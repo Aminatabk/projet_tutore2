@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsommationController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ReclamationController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,15 @@ Route::resource('factures', FactureController::class)
 */
 
 Route::resource('reclamations', ReclamationController::class)
+    ->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Gestion des utilisateurs
+|--------------------------------------------------------------------------
+*/
+
+Route::resource('users', UserController::class)
     ->middleware('auth');
 
 /*

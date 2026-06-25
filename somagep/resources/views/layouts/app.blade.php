@@ -57,6 +57,7 @@ SOMAGEP
 <a href="/consommations">Consommations</a>
 <a href="/factures">Factures</a>
 <a href="/reclamations">Réclamations</a>
+<a href="/users">Utilisateurs</a>
 
 <form action="/logout" method="POST">
 @csrf
