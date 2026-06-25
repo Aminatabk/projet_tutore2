@@ -11,9 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('factures', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('factures', function (Blueprint $table) {
+
+            $table->unsignedBigInteger('abonne_id')->after('id');
+
+            $table->unsignedBigInteger('consommation_id')->after('abonne_id');
+
+            $table->decimal('montant', 10, 2)->after('consommation_id');
+
+            $table->string('statut')
+                  ->default('Non payée')
+                  ->after('montant');
+
         });
     }
 
@@ -22,6 +31,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('factures');
+        Schema::table('factures', function (Blueprint $table) {
+
+            $table->dropColumn([
+                'abonne_id',
+                'consommation_id',
+                'montant',
+                'statut'
+            ]);
+
+        });
     }
 };

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Facture;
+use App\Models\Abonne;
+use App\Models\Consommation;
 use Illuminate\Http\Request;
 
 class FactureController extends Controller
@@ -10,10 +12,10 @@ class FactureController extends Controller
     public function index()
     {
         try {
-            $factures = Facture::with('abonne')->get();
+            $factures = Facture::with(['abonne', 'consommation'])->get();
+
             return view('factures.index', compact('factures'));
         } catch (\Exception $e) {
-            // En cas d'erreur, retourner une vue avec un message
             return back()->with('error', 'Erreur : ' . $e->getMessage());
         }
     }
@@ -21,7 +23,12 @@ class FactureController extends Controller
     public function create()
     {
         $abonnes = Abonne::all();
-        return view('factures.create', compact('abonnes'));
+        $consommations = Consommation::all();
+
+        return view(
+            'factures.create',
+            compact('abonnes', 'consommations')
+        );
     }
 
     public function store(Request $request)
@@ -29,6 +36,7 @@ class FactureController extends Controller
         $request->validate([
             'numero_facture' => 'required|unique:factures',
             'abonne_id' => 'required|exists:abonnes,id',
+            'consommation_id' => 'required|exists:consommations,id',
             'montant' => 'required|numeric',
             'statut' => 'required',
             'date_emission' => 'required|date',
@@ -37,13 +45,15 @@ class FactureController extends Controller
 
         Facture::create($request->all());
 
-        return redirect()->route('factures.index')
-            ->with('success', 'Facture créée avec succès');
+        return redirect()
+            ->route('factures.index')
+            ->with('success', 'Facture créée avec succès.');
     }
 
     public function show($id)
     {
-        $facture = Facture::with('abonne')->findOrFail($id);
+        $facture = Facture::with(['abonne', 'consommation'])->findOrFail($id);
+
         return view('factures.show', compact('facture'));
     }
 
@@ -51,16 +61,22 @@ class FactureController extends Controller
     {
         $facture = Facture::findOrFail($id);
         $abonnes = Abonne::all();
-        return view('factures.edit', compact('facture', 'abonnes'));
+        $consommations = Consommation::all();
+
+        return view(
+            'factures.edit',
+            compact('facture', 'abonnes', 'consommations')
+        );
     }
 
     public function update(Request $request, $id)
     {
         $facture = Facture::findOrFail($id);
-        
+
         $request->validate([
             'numero_facture' => 'required|unique:factures,numero_facture,' . $id,
             'abonne_id' => 'required|exists:abonnes,id',
+            'consommation_id' => 'required|exists:consommations,id',
             'montant' => 'required|numeric',
             'statut' => 'required',
             'date_emission' => 'required|date',
@@ -69,16 +85,17 @@ class FactureController extends Controller
 
         $facture->update($request->all());
 
-        return redirect()->route('factures.index')
-            ->with('success', 'Facture mise à jour avec succès');
+        return redirect()
+            ->route('factures.index')
+            ->with('success', 'Facture mise à jour avec succès.');
     }
 
     public function destroy($id)
     {
-        $facture = Facture::findOrFail($id);
-        $facture->delete();
+        Facture::destroy($id);
 
-        return redirect()->route('factures.index')
-            ->with('success', 'Facture supprimée avec succès');
+        return redirect()
+            ->route('factures.index')
+            ->with('success', 'Facture supprimée avec succès.');
     }
 }
