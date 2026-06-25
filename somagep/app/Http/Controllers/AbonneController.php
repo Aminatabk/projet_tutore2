@@ -33,16 +33,16 @@ class AbonneController extends Controller
         $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'telephone' => 'required'
+            'telephone' => 'required',
         ]);
 
-        Abonne::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'adresse' => $request->adresse,
-            'telephone' => $request->telephone,
-            'email' => $request->email
-        ]);
+        Abonne::create($request->only([
+            'nom',
+            'prenom',
+            'adresse',
+            'telephone',
+            'email'
+        ]));
 
         return redirect()
             ->route('abonnes.index')
@@ -72,17 +72,23 @@ class AbonneController extends Controller
     /**
      * Mettre à jour un abonné
      */
-    public function update(Request $request, $id)`
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'nom' => 'required',
+            'prenom' => 'required',
+            'telephone' => 'required',
+        ]);
+
         $abonne = Abonne::findOrFail($id);
 
-        $abonne->update([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'adresse' => $request->adresse,
-            'telephone' => $request->telephone,
-            'email' => $request->email
-        ]);
+        $abonne->update($request->only([
+            'nom',
+            'prenom',
+            'adresse',
+            'telephone',
+            'email'
+        ]));
 
         return redirect()
             ->route('abonnes.index')
@@ -94,7 +100,7 @@ class AbonneController extends Controller
      */
     public function destroy($id)
     {
-        Abonne::destroy($id);
+        Abonne::findOrFail($id)->delete();
 
         return redirect()
             ->route('abonnes.index')

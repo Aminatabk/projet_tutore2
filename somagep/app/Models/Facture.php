@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Facture extends Model
 {
     protected $fillable = [
+        'numero_facture',
         'abonne_id',
         'consommation_id',
         'montant',
-        'statut'
+        'statut',
+        'date_emission',
+        'date_echeance'
     ];
 
     public function abonne()
