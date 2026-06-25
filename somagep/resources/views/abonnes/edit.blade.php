@@ -1,0 +1,85 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="card shadow">
+
+    <div class="card-header bg-warning">
+
+        <h4 class="mb-0">
+            Modifier un abonné
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <form action="{{ route('abonnes.update',$abonne->id) }}"
+              method="POST">
+
+            @csrf
+            @method('PUT')
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nom
+                </label>
+
+                <input type="text"
+                       name="nom"
+                       value="{{ $abonne->nom }}"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input type="email"
+                       name="email"
+                       value="{{ $abonne->email }}"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Téléphone
+                </label>
+
+                <input type="text"
+                       name="telephone"
+                       value="{{ $abonne->telephone }}"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Adresse
+                </label>
+
+                <textarea name="adresse"
+                          class="form-control">{{ $abonne->adresse }}</textarea>
+
+            </div>
+
+            <button class="btn btn-primary">
+
+                Mettre à jour
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@endsection

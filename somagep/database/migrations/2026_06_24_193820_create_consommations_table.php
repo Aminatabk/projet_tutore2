@@ -6,22 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('consommations', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('consommations', function (Blueprint $table) {
+
+            $table->unsignedBigInteger('abonne_id')->after('id');
+
+            $table->integer('ancienne_valeur')->after('abonne_id');
+
+            $table->integer('nouvelle_valeur')->after('ancienne_valeur');
+
+            $table->integer('consommation')->after('nouvelle_valeur');
+
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('consommations');
+        Schema::table('consommations', function (Blueprint $table) {
+
+            $table->dropColumn([
+                'abonne_id',
+                'ancienne_valeur',
+                'nouvelle_valeur',
+                'consommation'
+            ]);
+
+        });
     }
 };

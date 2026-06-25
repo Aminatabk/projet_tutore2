@@ -2,46 +2,75 @@
 
 @section('content')
 
-<h2>Nouveau Relevé</h2>
+<div class="card shadow">
 
-<form action="/consommations" method="POST">
+    <div class="card-header bg-info text-white">
 
-    @csrf
+        <h4 class="mb-0">
+            Nouvelle consommation
+        </h4>
 
-    <div class="mb-3">
-        <label>Abonné</label>
-
-        <select name="abonne_id" class="form-control">
-
-            @foreach($abonnes as $abonne)
-
-            <option value="{{ $abonne->id }}">
-                {{ $abonne->nom }}
-            </option>
-
-            @endforeach
-
-        </select>
     </div>
 
-    <div class="mb-3">
-        <input type="number"
-               name="ancienne_valeur"
-               class="form-control"
-               placeholder="Ancienne valeur">
+    <div class="card-body">
+
+        <form action="{{ route('consommations.store') }}" method="POST">
+
+            @csrf
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Abonné
+                </label>
+
+                <select name="abonne_id"
+                        class="form-control">
+
+                    @foreach($abonnes as $abonne)
+
+                        <option value="{{ $abonne->id }}">
+                            {{ $abonne->nom }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Ancien index
+                </label>
+
+                <input type="number"
+                       name="ancienne_valeur"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nouvel index
+                </label>
+
+                <input type="number"
+                       name="nouvelle_valeur"
+                       class="form-control">
+
+            </div>
+
+            <button class="btn btn-success">
+                Enregistrer
+            </button>
+
+        </form>
+
     </div>
 
-    <div class="mb-3">
-        <input type="number"
-               name="nouvelle_valeur"
-               class="form-control"
-               placeholder="Nouvelle valeur">
-    </div>
-
-    <button class="btn btn-success">
-        Enregistrer
-    </button>
-
-</form>
+</div>
 
 @endsection

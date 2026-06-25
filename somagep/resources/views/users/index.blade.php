@@ -2,75 +2,109 @@
 
 @section('content')
 
-<h2>Gestion des utilisateurs</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<a href="{{ route('users.create') }}"
-class="btn btn-primary mb-3">
+    <h2>Gestion des Utilisateurs</h2>
 
-Ajouter
+    <a href="{{ route('users.create') }}"
+       class="btn btn-primary">
 
-</a>
+        <i class="bi bi-person-plus"></i>
+        Ajouter utilisateur
 
-<table class="table table-striped">
+    </a>
 
-<thead>
+</div>
 
-<tr>
+<div class="card border-0 shadow-sm">
 
-<th>ID</th>
-<th>Nom</th>
-<th>Email</th>
-<th>Rôle</th>
-<th>Actions</th>
+    <div class="card-body">
 
-</tr>
+        <table class="table table-hover">
 
-</thead>
+            <thead class="table-primary">
 
-<tbody>
+                <tr>
 
-@foreach($users as $user)
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Actions</th>
 
-<tr>
+                </tr>
 
-<td>{{ $user->id }}</td>
-<td>{{ $user->name }}</td>
-<td>{{ $user->email }}</td>
-<td>{{ $user->role }}</td>
+            </thead>
 
-<td>
+            <tbody>
 
-<a href="{{ route('users.edit', $user->id) }}"
-class="btn btn-warning btn-sm">
+            @forelse($users as $user)
 
-Modifier
+                <tr>
 
-</a>
+                    <td>{{ $user->id }}</td>
 
-<form action="{{ route('users.destroy', $user->id) }}"
-method="POST"
-style="display:inline">
+                    <td>{{ $user->name }}</td>
 
-@csrf
-@method('DELETE')
+                    <td>{{ $user->email }}</td>
 
-<button type="submit"
-class="btn btn-danger btn-sm">
+                    <td>
 
-Supprimer
+                        @if($user->role == 'admin')
 
-</button>
+                            <span class="badge bg-danger">
+                                Administrateur
+                            </span>
 
-</form>
+                        @elseif($user->role == 'agent')
 
-</td>
+                            <span class="badge bg-primary">
+                                Agent
+                            </span>
 
-</tr>
+                        @else
 
-@endforeach
+                            <span class="badge bg-success">
+                                Client
+                            </span>
 
-</tbody>
+                        @endif
 
-</table>
+                    </td>
+
+                    <td>
+
+                        <a href="{{ route('users.edit',$user->id) }}"
+                           class="btn btn-warning btn-sm">
+
+                            <i class="bi bi-pencil"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            @empty
+
+                <tr>
+
+                    <td colspan="5" class="text-center">
+
+                        Aucun utilisateur trouvé
+
+                    </td>
+
+                </tr>
+
+            @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 @endsection
