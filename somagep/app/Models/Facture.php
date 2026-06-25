@@ -7,21 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Facture extends Model
 {
     protected $fillable = [
-        'abonne_id',
         'numero_facture',
+        'abonne_id',
         'montant',
-        'date_facture',
-        'date_echeance',
-        'statut'
+        'statut',
+        'date_emission',
+        'date_echeance'
     ];
-
+    
+    // Relation avec Abonne
     public function abonne()
     {
         return $this->belongsTo(Abonne::class);
-    }
-
-    public function paiements()
-    {
-        return $this->hasMany(Paiement::class);
     }
 }

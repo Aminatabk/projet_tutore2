@@ -23,7 +23,10 @@ class AuthController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+
+            // rôle par défaut
+            'role' => 'client'
         ]);
 
         return redirect('/login')
@@ -47,7 +50,15 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('/dashboard');
+            if (Auth::user()->role == 'admin') {
+                return redirect('/admin/dashboard');
+            }
+
+            if (Auth::user()->role == 'agent') {
+                return redirect('/agent/dashboard');
+            }
+
+            return redirect('/client/dashboard');
         }
 
         return back()->with(

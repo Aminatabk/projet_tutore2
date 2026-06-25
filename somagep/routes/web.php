@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsommationController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ReclamationController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,12 +41,75 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard
+| Dashboards
 |--------------------------------------------------------------------------
 */
 
 Route::get('/dashboard', function () {
     return view('dashboard.index');
+})->middleware('auth');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->middleware('auth');
+
+Route::get('/agent/dashboard', function () {
+    return view('agent.dashboard');
+})->middleware('auth');
+
+Route::get('/client/dashboard', function () {
+    return view('client.dashboard');
+})->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Espace Client
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/mes-factures', function () {
+
+    $factures = App\Models\Facture::all();
+
+    return view(
+        'client.factures',
+        compact('factures')
+    );
+
+})->middleware('auth');
+
+Route::get('/mes-consommations', function () {
+
+    $consommations = App\Models\Consommation::all();
+
+    return view(
+        'client.consommations',
+        compact('consommations')
+    );
+
+})->middleware('auth');
+
+Route::get('/mes-reclamations', function () {
+
+    $reclamations = App\Models\Reclamation::all();
+
+    return view(
+        'client.reclamations',
+        compact('reclamations')
+    );
+
+})->middleware('auth');
+
+Route::get('/mon-profil', function () {
+
+    return view('client.profil');
+
+})->middleware('auth');
+
+Route::get('/paiement-facture', function () {
+
+    return view('client.paiement');
+
 })->middleware('auth');
 
 /*
@@ -82,6 +146,15 @@ Route::resource('factures', FactureController::class)
 */
 
 Route::resource('reclamations', ReclamationController::class)
+    ->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Gestion des utilisateurs
+|--------------------------------------------------------------------------
+*/
+
+Route::resource('users', UserController::class)
     ->middleware('auth');
 
 /*

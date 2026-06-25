@@ -2,48 +2,88 @@
 
 @section('content')
 
-<h2>Nouvel abonné</h2>
+<div class="card shadow">
 
-<form action="/abonnes" method="POST">
+    <div class="card-header bg-primary text-white">
 
-@csrf
+        <h4 class="mb-0">
+            Nouvel abonné
+        </h4>
 
-<input
-type="text"
-name="nom"
-class="form-control mb-3"
-placeholder="Nom">
+    </div>
 
-<input
-type="text"
-name="prenom"
-class="form-control mb-3"
-placeholder="Prénom">
+    <div class="card-body">
 
-<input
-type="email"
-name="email"
-class="form-control mb-3"
-placeholder="Email">
+        <form action="{{ route('abonnes.store') }}" method="POST">
 
-<input
-type="text"
-name="telephone"
-class="form-control mb-3"
-placeholder="Téléphone">
+            @csrf
 
-<textarea
-name="adresse"
-class="form-control mb-3"
-placeholder="Adresse">
-</textarea>
+            <div class="mb-3">
 
-<button class="btn btn-success">
+                <label class="form-label">
+                    Nom complet
+                </label>
 
-Enregistrer
+                <input type="text"
+                       name="nom"
+                       class="form-control"
+                       required>
 
-</button>
+            </div>
 
-</form>
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input type="email"
+                       name="email"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Téléphone
+                </label>
+
+                <input type="text"
+                       name="telephone"
+                       class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Adresse
+                </label>
+
+                <textarea name="adresse"
+                          class="form-control"
+                          rows="3"></textarea>
+
+            </div>
+
+            <button class="btn btn-success">
+
+                Enregistrer
+
+            </button>
+
+            <a href="{{ route('abonnes.index') }}"
+               class="btn btn-secondary">
+
+                Retour
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
 
 @endsection

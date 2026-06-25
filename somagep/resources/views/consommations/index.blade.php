@@ -2,34 +2,110 @@
 
 @section('content')
 
-<h2>Liste des Consommations</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<a href="/consommations/create" class="btn btn-primary mb-3">
-    Nouveau relevé
-</a>
+    <h2>
+        Gestion des consommations
+    </h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Abonné</th>
-            <th>Ancienne Valeur</th>
-            <th>Nouvelle Valeur</th>
-            <th>Consommation</th>
-        </tr>
-    </thead>
+    <a href="{{ route('consommations.create') }}"
+       class="btn btn-primary">
 
-    <tbody>
-        @foreach($consommations as $conso)
-        <tr>
-            <td>{{ $conso->id }}</td>
-            <td>{{ $conso->abonne->nom }}</td>
-            <td>{{ $conso->ancienne_valeur }}</td>
-            <td>{{ $conso->nouvelle_valeur }}</td>
-            <td>{{ $conso->consommation }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+        <i class="bi bi-plus-circle"></i>
+        Nouvelle consommation
+
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead class="table-info">
+
+                <tr>
+                    <th>ID</th>
+                    <th>Abonné</th>
+                    <th>Ancien Index</th>
+                    <th>Nouvel Index</th>
+                    <th>Consommation</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            @forelse($consommations as $consommation)
+
+                <tr>
+
+                    <td>{{ $consommation->id }}</td>
+
+                    <td>
+                        {{ $consommation->abonne->nom ?? 'N/A' }}
+                    </td>
+
+                    <td>{{ $consommation->ancienne_valeur }}</td>
+
+                    <td>{{ $consommation->nouvelle_valeur }}</td>
+
+                    <td>
+                        <span class="badge bg-primary">
+                            {{ $consommation->consommation }} m³
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <a href="{{ route('consommations.edit',$consommation->id) }}"
+                           class="btn btn-warning btn-sm">
+
+                            Modifier
+
+                        </a>
+
+                        <form action="{{ route('consommations.destroy',$consommation->id) }}"
+                              method="POST"
+                              class="d-inline">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Supprimer cette consommation ?')">
+
+                                Supprimer
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            @empty
+
+                <tr>
+
+                    <td colspan="6" class="text-center">
+                        Aucune consommation enregistrée
+                    </td>
+
+                </tr>
+
+            @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 @endsection
