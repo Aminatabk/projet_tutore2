@@ -8,30 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('consommations', function (Blueprint $table) {
-
-            $table->unsignedBigInteger('abonne_id')->after('id');
-
-            $table->integer('ancienne_valeur')->after('abonne_id');
-
-            $table->integer('nouvelle_valeur')->after('ancienne_valeur');
-
-            $table->integer('consommation')->after('nouvelle_valeur');
-
+        Schema::create('consommations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('abonne_id')->constrained('abonnes')->onDelete('cascade');
+            $table->integer('ancienne_valeur');
+            $table->integer('nouvelle_valeur');
+            $table->integer('consommation');
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('consommations', function (Blueprint $table) {
-
-            $table->dropColumn([
-                'abonne_id',
-                'ancienne_valeur',
-                'nouvelle_valeur',
-                'consommation'
-            ]);
-
-        });
+        Schema::dropIfExists('consommations');
     }
 };

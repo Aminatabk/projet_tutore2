@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('abonnes', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('adresse')->nullable();
+            $table->string('telephone');
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }

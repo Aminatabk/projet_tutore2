@@ -8,27 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('factures', function (Blueprint $table) {
-
-            $table->string('numero_facture')->unique()->after('id');
-
-            $table->date('date_emission')->after('statut');
-
-            $table->date('date_echeance')->after('date_emission');
-
-        });
+        // Les colonnes sont maintenant créées initialement dans la migration principale de la table factures.
     }
 
     public function down(): void
     {
-        Schema::table('factures', function (Blueprint $table) {
-
-            $table->dropColumn([
-                'numero_facture',
-                'date_emission',
-                'date_echeance'
-            ]);
-
-        });
+        //
     }
 };

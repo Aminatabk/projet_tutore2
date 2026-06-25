@@ -43,7 +43,7 @@
                     <td>{{ $reclamation->id }}</td>
 
                     <td>
-                        <strong>{{ $reclamation->sujet }}</strong>
+                        <strong>{{ $reclamation->objet }}</strong>
                     </td>
 
                     <td>{{ $reclamation->description }}</td>

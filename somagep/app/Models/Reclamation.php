@@ -10,7 +10,8 @@ class Reclamation extends Model
         'abonne_id',
         'objet',
         'description',
-        'statut'
+        'statut',
+        'date_reclamation'
     ];
 
     public function abonne()

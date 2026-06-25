@@ -6,40 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('factures', function (Blueprint $table) {
-
-            $table->unsignedBigInteger('abonne_id')->after('id');
-
-            $table->unsignedBigInteger('consommation_id')->after('abonne_id');
-
-            $table->decimal('montant', 10, 2)->after('consommation_id');
-
-            $table->string('statut')
-                  ->default('Non payée')
-                  ->after('montant');
-
+        Schema::create('factures', function (Blueprint $table) {
+            $table->id();
+            $table->string('numero_facture')->unique();
+            $table->foreignId('abonne_id')->constrained('abonnes')->onDelete('cascade');
+            $table->foreignId('consommation_id')->constrained('consommations')->onDelete('cascade');
+            $table->decimal('montant', 10, 2);
+            $table->string('statut')->default('Non payée');
+            $table->date('date_emission');
+            $table->date('date_echeance');
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('factures', function (Blueprint $table) {
-
-            $table->dropColumn([
-                'abonne_id',
-                'consommation_id',
-                'montant',
-                'statut'
-            ]);
-
-        });
+        Schema::dropIfExists('factures');
     }
 };

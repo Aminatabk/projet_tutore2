@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('facture_id')->constrained('factures')->onDelete('cascade');
+            $table->decimal('montant', 10, 2);
+            $table->string('mode');
+            $table->string('reference_paiement')->unique();
+            $table->string('statut')->default('Valide');
             $table->timestamps();
         });
     }

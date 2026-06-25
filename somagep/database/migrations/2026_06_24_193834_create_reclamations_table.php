@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('reclamations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('abonne_id')->constrained('abonnes')->onDelete('cascade');
+            $table->string('objet');
+            $table->text('description');
+            $table->string('statut')->default('En attente');
+            $table->timestamp('date_reclamation')->nullable();
             $table->timestamps();
         });
     }
