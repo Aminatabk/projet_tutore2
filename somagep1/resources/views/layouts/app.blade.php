@@ -98,30 +98,70 @@ body{
     Dashboard
 </a>
 
-<a href="/abonnes">
-    <i class="bi bi-people-fill"></i>
-    Abonnés
-</a>
+@if(in_array(auth()->user()->role, ['admin', 'agent']))
 
-<a href="/consommations">
-    <i class="bi bi-droplet-fill"></i>
-    Consommations
-</a>
+    <a href="/abonnes">
+        <i class="bi bi-people-fill"></i>
+        Abonnés
+    </a>
 
-<a href="/factures">
-    <i class="bi bi-receipt"></i>
-    Factures
-</a>
+    <a href="/consommations">
+        <i class="bi bi-droplet-fill"></i>
+        Consommations
+    </a>
 
-<a href="/reclamations">
-    <i class="bi bi-chat-left-text"></i>
-    Réclamations
-</a>
+    <a href="/factures">
+        <i class="bi bi-receipt"></i>
+        Factures
+    </a>
 
-<a href="/users">
-    <i class="bi bi-person-badge-fill"></i>
-    Utilisateurs
-</a>
+    <a href="/reclamations">
+        <i class="bi bi-chat-left-text"></i>
+        Réclamations
+    </a>
+
+    <a href="/paiements">
+        <i class="bi bi-cash-coin"></i>
+        Paiements
+    </a>
+
+@else
+
+    <a href="/mes-factures">
+        <i class="bi bi-receipt"></i>
+        Mes Factures
+    </a>
+
+    <a href="/mes-consommations">
+        <i class="bi bi-droplet-fill"></i>
+        Mes Consommations
+    </a>
+
+    <a href="/mes-reclamations">
+        <i class="bi bi-chat-left-text"></i>
+        Mes Réclamations
+    </a>
+
+    <a href="/paiement">
+        <i class="bi bi-cash-coin"></i>
+        Payer une facture
+    </a>
+
+    <a href="/profil">
+        <i class="bi bi-person-circle"></i>
+        Mon Profil
+    </a>
+
+@endif
+
+@if(auth()->user()->role == 'admin')
+
+    <a href="/users">
+        <i class="bi bi-person-badge-fill"></i>
+        Utilisateurs
+    </a>
+
+@endif
 
 <hr class="text-white">
 
