@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>SOMAGEP</title>
+<title>DJITRAK</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -20,53 +20,88 @@ body{
 
 .sidebar{
     min-height:100vh;
-    background:linear-gradient(180deg,#0d6efd,#084298);
-    padding:20px;
+    background:linear-gradient(180deg,#0a3d91,#0d6efd);
+    padding:25px;
+    box-shadow:8px 0 20px rgba(0,0,0,.15);
 }
 
 .logo{
-    text-align:center;
     color:white;
-    font-size:26px;
-    font-weight:bold;
-    margin-bottom:30px;
+    text-align:center;
+    margin-bottom:45px;
 }
 
+.logo h2{
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.logo small{
+    font-size:13px;
+}
 .sidebar a{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
     color:white;
     text-decoration:none;
-    display:block;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:8px;
-    transition:.3s;
+
+    padding:14px 18px;
+
+    border-radius:14px;
+
+    margin-bottom:10px;
+
+    transition:.35s;
+
+    font-weight:500;
+
 }
 
 .sidebar a:hover{
-    background:rgba(255,255,255,.2);
-}
 
+    background:white;
+    color:#0d6efd;
+
+    transform:translateX(6px);
+
+}
 .sidebar i{
     margin-right:10px;
 }
 
 .topbar{
+
     background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 0 10px rgba(0,0,0,.08);
-    margin-bottom:25px;
+
+    border-radius:18px;
+
+    padding:22px 30px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
 }
 
 .card-dashboard{
+
     border:none;
-    border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
-    transition:.3s;
+
+    border-radius:22px;
+
+    transition:.35s;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
 }
 
 .card-dashboard:hover{
-    transform:translateY(-5px);
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 40px rgba(13,110,253,.15);
+
 }
 
 .stat-icon{
@@ -75,10 +110,13 @@ body{
 }
 
 .content{
-    padding:30px;
+
+    padding:35px;
+
 }
 
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -89,8 +127,20 @@ body{
 
 <div class="col-md-2 sidebar">
 
-<div class="logo">
-    💧 SOMAGEP
+<div class="logo text-center">
+
+    <div style="font-size:55px;">
+        💧
+    </div>
+
+    <h2 class="fw-bold mb-0">
+        DJITRAK
+    </h2>
+
+    <small class="text-light opacity-75">
+        La gestion intelligente de l'eau
+    </small>
+
 </div>
 
 <a href="/dashboard">
@@ -168,7 +218,10 @@ body{
 <form action="/logout" method="POST">
 @csrf
 
-<button class="btn btn-danger w-100">
+<button class="btn btn-light w-100 rounded-4 fw-bold py-2">
+    <i class="bi bi-box-arrow-right"></i>
+    Déconnexion
+</button>
     <i class="bi bi-box-arrow-right"></i>
     Déconnexion
 </button>
@@ -183,9 +236,17 @@ body{
 
 <div class="d-flex justify-content-between">
 
-<h4>
-    Gestion des abonnés SOMAGEP
-</h4>
+<div>
+
+<h3 class="fw-bold mb-1">
+    Tableau de bord DJITRAK
+</h3>
+
+<p class="text-secondary mb-0">
+    Système de gestion intelligente de la distribution d'eau
+</p>
+
+</div>
 
 <span>
     Bienvenue {{ Auth::user()->name ?? '' }}

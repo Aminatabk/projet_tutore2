@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Abonne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,5 +29,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Abonné associé à ce compte utilisateur.
+     */
+    public function abonne()
+    {
+        return $this->hasOne(Abonne::class);
     }
 }

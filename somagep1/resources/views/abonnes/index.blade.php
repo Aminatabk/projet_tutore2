@@ -4,42 +4,62 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2>
-        Gestion des abonnés
-    </h2>
+    <div>
 
-    <a href="{{ route('abonnes.create') }}"
-       class="btn btn-primary">
+        <h2 class="fw-bold mb-1">
+            Gestion des abonnés
+        </h2>
 
-        <i class="bi bi-plus-circle"></i>
-        Ajouter un abonné
+        <p class="text-muted mb-0">
+            Gérez les abonnés enregistrés dans le système DJITRAK.
+        </p>
+
+    </div>
+
+    <a href="{{ route('abonnes.create') }}" class="btn btn-primary rounded-3 px-4">
+
+        <i class="bi bi-person-plus-fill"></i>
+
+        Nouvel abonné
 
     </a>
 
 </div>
 
-<div class="card shadow-sm mb-3">
+
+<div class="card border-0 shadow-sm rounded-4 mb-4">
 
     <div class="card-body">
 
-        <form action="{{ route('abonnes.index') }}" method="GET" class="d-flex gap-2">
+        <form action="{{ route('abonnes.index') }}" method="GET">
 
-            <input type="text"
-                   name="q"
-                   value="{{ $recherche ?? '' }}"
-                   class="form-control"
-                   placeholder="Rechercher par nom, prénom, téléphone ou email...">
+            <div class="row g-3">
 
-            <button class="btn btn-primary">
-                <i class="bi bi-search"></i>
-                Rechercher
-            </button>
+                <div class="col-md-10">
 
-            @if(!empty($recherche))
-                <a href="{{ route('abonnes.index') }}" class="btn btn-secondary">
-                    Réinitialiser
-                </a>
-            @endif
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ $recherche ?? '' }}"
+                        class="form-control form-control-lg rounded-3"
+                        placeholder="Rechercher un abonné..."
+                    >
+
+                </div>
+
+                <div class="col-md-2 d-grid">
+
+                    <button class="btn btn-primary rounded-3">
+
+                        <i class="bi bi-search"></i>
+
+                        Rechercher
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </form>
 
@@ -47,96 +67,193 @@
 
 </div>
 
-<div class="card shadow-sm">
 
-    <div class="card-body">
+<div class="card border-0 shadow rounded-4">
 
-        <table class="table table-hover">
+    <div class="card-header bg-white border-0">
 
-            <thead class="table-primary">
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-people-fill text-primary"></i>
+
+                Liste des abonnés
+
+            </h5>
+
+            <span class="badge bg-primary fs-6">
+
+                {{ $abonnes->count() }} Abonné(s)
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
 
                 <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
+
+                    <th>#</th>
+
+                    <th>Abonné</th>
+
                     <th>Email</th>
+
                     <th>Téléphone</th>
+
                     <th>Adresse</th>
-                    <th>Actions</th>
+
+                    <th class="text-center">
+                        Actions
+                    </th>
+
                 </tr>
 
-            </thead>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-            @forelse($abonnes as $abonne)
+                @forelse($abonnes as $abonne)
 
-                <tr>
+                    <tr>
 
-                    <td>{{ $abonne->id }}</td>
-                    <td>{{ $abonne->nom }}</td>
-                    <td>{{ $abonne->prenom }}</td>
-                    <td>{{ $abonne->email }}</td>
-                    <td>{{ $abonne->telephone }}</td>
-                    <td>{{ $abonne->adresse }}</td>
+                        <td>
 
-                    <td>
+                            <span class="fw-bold text-primary">
 
-                        <a href="{{ route('abonnes.show',$abonne->id) }}"
-                           class="btn btn-info btn-sm">
+                                #{{ $abonne->id }}
 
-                            <i class="bi bi-eye"></i>
+                            </span>
 
-                        </a>
+                        </td>
 
-                        <a href="{{ route('abonnes.edit',$abonne->id) }}"
-                           class="btn btn-warning btn-sm">
+                        <td>
 
-                            Modifier
+                            <div class="d-flex align-items-center">
 
-                        </a>
+                                <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3"
+                                     style="width:45px;height:45px;">
 
-                        <form action="{{ route('abonnes.destroy',$abonne->id) }}"
-                              method="POST"
-                              class="d-inline">
+                                    <i class="bi bi-person-fill"></i>
 
-                            @csrf
-                            @method('DELETE')
+                                </div>
 
-                            <button class="btn btn-danger btn-sm"
+                                <div>
+
+                                    <div class="fw-bold">
+
+                                        {{ $abonne->nom }} {{ $abonne->prenom }}
+
+                                    </div>
+
+                                    <small class="text-muted">
+
+                                        Abonné DJITRAK
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            {{ $abonne->email }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $abonne->telephone }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $abonne->adresse }}
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <a href="{{ route('abonnes.show',$abonne->id) }}"
+                               class="btn btn-info btn-sm rounded-circle">
+
+                                <i class="bi bi-eye-fill"></i>
+
+                            </a>
+
+                            <a href="{{ route('abonnes.edit',$abonne->id) }}"
+                               class="btn btn-warning btn-sm rounded-circle">
+
+                                <i class="bi bi-pencil-fill"></i>
+
+                            </a>
+
+                            <form
+                                action="{{ route('abonnes.destroy',$abonne->id) }}"
+                                method="POST"
+                                class="d-inline">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    class="btn btn-danger btn-sm rounded-circle"
                                     onclick="return confirm('Supprimer cet abonné ?')">
 
-                                Supprimer
+                                    <i class="bi bi-trash-fill"></i>
 
-                            </button>
+                                </button>
 
-                        </form>
+                            </form>
 
-                    </td>
+                        </td>
 
-                </tr>
+                    </tr>
 
-            @empty
+                @empty
 
-                <tr>
+                    <tr>
 
-                    <td colspan="7" class="text-center">
+                        <td colspan="6" class="text-center py-5">
 
-                        @if(!empty($recherche))
-                            Aucun abonné ne correspond à "{{ $recherche }}"
-                        @else
-                            Aucun abonné enregistré
-                        @endif
+                            <i class="bi bi-person-x display-5 text-secondary"></i>
 
-                    </td>
+                            <h5 class="mt-3">
 
-                </tr>
+                                Aucun abonné trouvé
 
-            @endforelse
+                            </h5>
 
-            </tbody>
+                            <p class="text-muted">
 
-        </table>
+                                Commencez par ajouter un nouvel abonné.
+
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 

@@ -28,11 +28,13 @@ Route::get('/', function () {
 */
 
 Route::middleware('guest')->group(function () {
+
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -45,8 +47,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-// Redirection générique vers le tableau de bord adapté au rôle de l'utilisateur
 Route::get('/dashboard', function () {
+
     $role = Auth::user()->role;
 
     return match ($role) {
@@ -54,6 +56,7 @@ Route::get('/dashboard', function () {
         'agent' => redirect('/agent/dashboard'),
         default => redirect('/client/dashboard'),
     };
+
 })->middleware('auth')->name('dashboard');
 
 Route::get('/admin/dashboard', function () {
@@ -75,10 +78,19 @@ Route::get('/client/dashboard', function () {
 */
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/mes-factures', [ClientController::class, 'factures'])->name('client.factures');
+
     Route::get('/mes-consommations', [ClientController::class, 'consommations'])->name('client.consommations');
+
     Route::get('/mes-reclamations', [ClientController::class, 'reclamations'])->name('client.reclamations');
+
     Route::get('/profil', [ClientController::class, 'profil'])->name('client.profil');
+
+    // Paiement par le client
+    Route::get('/paiement', [PaiementController::class, 'create'])->name('paiements.create');
+    Route::post('/paiement', [PaiementController::class, 'payer'])->name('paiements.store');
+
 });
 
 /*
@@ -88,18 +100,24 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin,agent'])->group(function () {
+
     Route::resource('abonnes', AbonneController::class);
+
     Route::resource('consommations', ConsommationController::class);
+
     Route::resource('factures', FactureController::class);
 
     Route::resource('reclamations', ReclamationController::class);
+
     Route::patch('/reclamations/{id}/traiter', [ReclamationController::class, 'traiter'])->name('reclamations.traiter');
+
     Route::patch('/reclamations/{id}/encours', [ReclamationController::class, 'encours'])->name('reclamations.encours');
+
     Route::patch('/reclamations/{id}/rejeter', [ReclamationController::class, 'rejeter'])->name('reclamations.rejeter');
 
+    // Liste des paiements réservée à l'administration
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
-    Route::get('/paiement', [PaiementController::class, 'create'])->name('paiements.create');
-    Route::post('/paiement', [PaiementController::class, 'payer'])->name('paiements.store');
+
 });
 
 /*
@@ -109,5 +127,7 @@ Route::middleware(['auth', 'role:admin,agent'])->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+
     Route::resource('users', UserController::class)->except(['show']);
+
 });

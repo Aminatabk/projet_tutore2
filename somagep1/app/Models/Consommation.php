@@ -10,7 +10,7 @@ class Consommation extends Model
         'abonne_id',
         'ancienne_valeur',
         'nouvelle_valeur',
-        'consommation'
+        'consommation',
     ];
 
     public function abonne()
