@@ -50,7 +50,16 @@
 
                     <td>
 
-                        <span class="badge bg-warning">
+                        @php
+                            $badgeClass = match($reclamation->statut) {
+                                'Traitée' => 'bg-success',
+                                'En cours' => 'bg-primary',
+                                'Rejetée' => 'bg-danger',
+                                default => 'bg-warning',
+                            };
+                        @endphp
+
+                        <span class="badge {{ $badgeClass }}">
                             {{ $reclamation->statut }}
                         </span>
 
@@ -71,6 +80,46 @@
                             <i class="bi bi-pencil"></i>
 
                         </a>
+
+                        <form action="{{ route('reclamations.encours',$reclamation->id) }}"
+                              method="POST"
+                              class="d-inline">
+
+                            @csrf
+                            @method('PATCH')
+
+                            <button class="btn btn-primary btn-sm" title="Marquer en cours">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </button>
+
+                        </form>
+
+                        <form action="{{ route('reclamations.traiter',$reclamation->id) }}"
+                              method="POST"
+                              class="d-inline">
+
+                            @csrf
+                            @method('PATCH')
+
+                            <button class="btn btn-success btn-sm" title="Marquer comme traitée">
+                                <i class="bi bi-check-circle"></i>
+                            </button>
+
+                        </form>
+
+                        <form action="{{ route('reclamations.rejeter',$reclamation->id) }}"
+                              method="POST"
+                              class="d-inline">
+
+                            @csrf
+                            @method('PATCH')
+
+                            <button class="btn btn-secondary btn-sm" title="Rejeter"
+                                    onclick="return confirm('Rejeter cette réclamation ?')">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+
+                        </form>
 
                         <form action="{{ route('reclamations.destroy',$reclamation->id) }}"
                               method="POST"

@@ -18,6 +18,35 @@
 
 </div>
 
+<div class="card shadow-sm mb-3">
+
+    <div class="card-body">
+
+        <form action="{{ route('abonnes.index') }}" method="GET" class="d-flex gap-2">
+
+            <input type="text"
+                   name="q"
+                   value="{{ $recherche ?? '' }}"
+                   class="form-control"
+                   placeholder="Rechercher par nom, prénom, téléphone ou email...">
+
+            <button class="btn btn-primary">
+                <i class="bi bi-search"></i>
+                Rechercher
+            </button>
+
+            @if(!empty($recherche))
+                <a href="{{ route('abonnes.index') }}" class="btn btn-secondary">
+                    Réinitialiser
+                </a>
+            @endif
+
+        </form>
+
+    </div>
+
+</div>
+
 <div class="card shadow-sm">
 
     <div class="card-body">
@@ -93,7 +122,11 @@
 
                     <td colspan="7" class="text-center">
 
-                        Aucun abonné enregistré
+                        @if(!empty($recherche))
+                            Aucun abonné ne correspond à "{{ $recherche }}"
+                        @else
+                            Aucun abonné enregistré
+                        @endif
 
                     </td>
 

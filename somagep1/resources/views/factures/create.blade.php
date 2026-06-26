@@ -6,21 +6,15 @@
 Nouvelle facture
 </h2>
 
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i>
+    Le numéro de facture, la date d'émission et le montant sont calculés automatiquement
+    à partir de la consommation sélectionnée.
+</div>
+
 <form action="{{ route('factures.store') }}" method="POST">
 
 @csrf
-
-<div class="mb-3">
-
-<label>Numéro facture</label>
-
-<input
-type="text"
-name="numero_facture"
-class="form-control"
-required>
-
-</div>
 
 <div class="mb-3">
 
@@ -28,13 +22,16 @@ required>
 
 <select
 name="abonne_id"
-class="form-control">
+class="form-control"
+required>
+
+<option value="" disabled selected>-- Choisir un abonné --</option>
 
 @foreach($abonnes as $abonne)
 
 <option value="{{ $abonne->id }}">
 
-{{ $abonne->nom }}
+{{ $abonne->nom }} {{ $abonne->prenom }}
 
 </option>
 
@@ -50,13 +47,16 @@ class="form-control">
 
 <select
 name="consommation_id"
-class="form-control">
+class="form-control"
+required>
+
+<option value="" disabled selected>-- Choisir une consommation --</option>
 
 @foreach($consommations as $conso)
 
 <option value="{{ $conso->id }}">
 
-Consommation #{{ $conso->id }}
+Consommation #{{ $conso->id }} ({{ $conso->consommation }} m³ - {{ $conso->abonne->nom ?? '' }})
 
 </option>
 
@@ -68,59 +68,25 @@ Consommation #{{ $conso->id }}
 
 <div class="mb-3">
 
-<label>Montant</label>
-
-<input
-type="number"
-step="0.01"
-name="montant"
-class="form-control">
-
-</div>
-
-<div class="mb-3">
-
-<label>Statut</label>
-
-<select
-name="statut"
-class="form-control">
-
-<option>Non payée</option>
-
-<option>Payée</option>
-
-</select>
-
-</div>
-
-<div class="mb-3">
-
-<label>Date émission</label>
-
-<input
-type="date"
-name="date_emission"
-class="form-control">
-
-</div>
-
-<div class="mb-3">
-
 <label>Date échéance</label>
 
 <input
 type="date"
 name="date_echeance"
-class="form-control">
+class="form-control"
+required>
 
 </div>
 
 <button class="btn btn-success">
 
-Enregistrer
+Générer la facture
 
 </button>
+
+<a href="{{ route('factures.index') }}" class="btn btn-secondary">
+    Annuler
+</a>
 
 </form>
 

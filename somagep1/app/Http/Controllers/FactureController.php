@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class FactureController extends Controller
 {
+    /**
+     * Prix unitaire du m3 d'eau (FCFA), utilisé pour le calcul automatique
+     */
+    const PRIX_UNITAIRE_M3 = 500;
+
     public function index()
     {
         try {
@@ -34,20 +39,28 @@ class FactureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'numero_facture' => 'required|unique:factures',
             'abonne_id' => 'required|exists:abonnes,id',
             'consommation_id' => 'required|exists:consommations,id',
-            'montant' => 'required|numeric',
-            'statut' => 'required',
-            'date_emission' => 'required|date',
-            'date_echeance' => 'required|date|after:date_emission',
+            'date_echeance' => 'required|date|after:today',
         ]);
 
-        Facture::create($request->all());
+        // Calcul automatique de la consommation et du montant
+        $consommation = Consommation::findOrFail($request->consommation_id);
+        $montant = $consommation->consommation * self::PRIX_UNITAIRE_M3;
+
+        Facture::create([
+            'numero_facture' => 'FACT-' . now()->format('Ymd') . '-' . strtoupper(uniqid()),
+            'abonne_id' => $request->abonne_id,
+            'consommation_id' => $request->consommation_id,
+            'montant' => $montant,
+            'statut' => 'Non payée',
+            'date_emission' => now()->toDateString(),
+            'date_echeance' => $request->date_echeance,
+        ]);
 
         return redirect()
             ->route('factures.index')
-            ->with('success', 'Facture créée avec succès.');
+            ->with('success', 'Facture générée automatiquement avec succès (montant calculé : ' . $montant . ' FCFA).');
     }
 
     public function show($id)
@@ -74,16 +87,23 @@ class FactureController extends Controller
         $facture = Facture::findOrFail($id);
 
         $request->validate([
-            'numero_facture' => 'required|unique:factures,numero_facture,' . $id,
             'abonne_id' => 'required|exists:abonnes,id',
             'consommation_id' => 'required|exists:consommations,id',
-            'montant' => 'required|numeric',
             'statut' => 'required',
-            'date_emission' => 'required|date',
-            'date_echeance' => 'required|date|after:date_emission',
+            'date_echeance' => 'required|date',
         ]);
 
-        $facture->update($request->all());
+        // Recalcul automatique du montant si la consommation liée change
+        $consommation = Consommation::findOrFail($request->consommation_id);
+        $montant = $consommation->consommation * self::PRIX_UNITAIRE_M3;
+
+        $facture->update([
+            'abonne_id' => $request->abonne_id,
+            'consommation_id' => $request->consommation_id,
+            'montant' => $montant,
+            'statut' => $request->statut,
+            'date_echeance' => $request->date_echeance,
+        ]);
 
         return redirect()
             ->route('factures.index')

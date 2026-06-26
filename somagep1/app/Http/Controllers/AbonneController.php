@@ -8,13 +8,24 @@ use Illuminate\Http\Request;
 class AbonneController extends Controller
 {
     /**
-     * Afficher la liste des abonnés
+     * Afficher la liste des abonnés (avec recherche)
      */
-    public function index()
+    public function index(Request $request)
     {
-        $abonnes = Abonne::all();
+        $recherche = $request->input('q');
 
-        return view('abonnes.index', compact('abonnes'));
+        $abonnes = Abonne::when($recherche, function ($query, $recherche) {
+                $query->where(function ($q) use ($recherche) {
+                    $q->where('nom', 'like', "%{$recherche}%")
+                      ->orWhere('prenom', 'like', "%{$recherche}%")
+                      ->orWhere('telephone', 'like', "%{$recherche}%")
+                      ->orWhere('email', 'like', "%{$recherche}%");
+                });
+            })
+            ->orderBy('nom')
+            ->get();
+
+        return view('abonnes.index', compact('abonnes', 'recherche'));
     }
 
     /**
@@ -93,17 +104,5 @@ class AbonneController extends Controller
         return redirect()
             ->route('abonnes.index')
             ->with('success', 'Abonné modifié avec succès');
-    }
-
-    /**
-     * Supprimer un abonné
-     */
-    public function destroy($id)
-    {
-        Abonne::findOrFail($id)->delete();
-
-        return redirect()
-            ->route('abonnes.index')
-            ->with('success', 'Abonné supprimé');
     }
 }
