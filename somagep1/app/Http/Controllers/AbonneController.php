@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Abonne;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AbonneController extends Controller
@@ -77,7 +78,16 @@ class AbonneController extends Controller
     {
         $abonne = Abonne::findOrFail($id);
 
-        return view('abonnes.edit', compact('abonne'));
+        // Comptes "client" disponibles à associer : ceux qui ne sont liés
+        // à aucun abonné, ou qui sont déjà liés à CET abonné précis
+        $usersDisponibles = User::where('role', 'client')
+            ->whereDoesntHave('abonne')
+            ->orWhereHas('abonne', function ($q) use ($abonne) {
+                $q->where('abonnes.id', $abonne->id);
+            })
+            ->get();
+
+        return view('abonnes.edit', compact('abonne', 'usersDisponibles'));
     }
 
     /**
@@ -101,8 +111,24 @@ class AbonneController extends Controller
             'email'
         ]));
 
+        // Lier (ou délier) ce compte abonné à un compte utilisateur "client"
+        $abonne->user_id = $request->input('user_id') ?: null;
+        $abonne->save();
+
         return redirect()
             ->route('abonnes.index')
             ->with('success', 'Abonné modifié avec succès');
+    }
+
+    /**
+     * Supprimer un abonné
+     */
+    public function destroy($id)
+    {
+        Abonne::findOrFail($id)->delete();
+
+        return redirect()
+            ->route('abonnes.index')
+            ->with('success', 'Abonné supprimé');
     }
 }

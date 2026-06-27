@@ -83,6 +83,36 @@
 
             </div>
 
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Compte client lié
+                </label>
+
+                <select name="user_id" class="form-control">
+
+                    <option value="">
+                        -- Aucun compte lié --
+                    </option>
+
+                    @foreach($usersDisponibles as $user)
+
+                        <option value="{{ $user->id }}"
+                            {{ $abonne->user_id == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }} ({{ $user->email }})
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+                <small class="text-muted">
+                    Permet à ce client de voir ses propres factures, consommations et réclamations
+                    quand il se connecte.
+                </small>
+
+            </div>
+
             <button class="btn btn-primary">
 
                 Mettre à jour

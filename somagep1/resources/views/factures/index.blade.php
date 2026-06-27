@@ -143,7 +143,7 @@
 
                     <td>
 
-                        @if($facture->statut == 'payee')
+                        @if($facture->statut == 'Payée')
 
                             <span class="badge bg-success">
 
@@ -153,23 +153,13 @@
 
                             </span>
 
-                        @elseif($facture->statut == 'en_attente')
-
-                            <span class="badge bg-warning text-dark">
-
-                                <i class="bi bi-clock-fill"></i>
-
-                                En attente
-
-                            </span>
-
                         @else
 
                             <span class="badge bg-danger">
 
                                 <i class="bi bi-x-circle-fill"></i>
 
-                                Impayée
+                                Non payée
 
                             </span>
 

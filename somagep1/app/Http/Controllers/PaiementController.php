@@ -20,14 +20,23 @@ class PaiementController extends Controller
     }
 
     /**
-     * Afficher le formulaire de paiement (client)
+     * Afficher le formulaire de paiement (client) : uniquement SES factures
+     * non payées, grâce au lien abonné <-> compte utilisateur
      */
     public function create()
     {
-        $factures = Facture::with('abonne')
-            ->where('statut', '!=', 'Payee')
-            ->where('statut', '!=', 'Payée')
-            ->get();
+        $user = Auth::user();
+
+        if (in_array($user->role, ['admin', 'agent'])) {
+            // Un agent/admin peut voir toutes les factures non payées
+            $factures = Facture::where('statut', '!=', 'Payée')->get();
+        } else {
+            $abonne = $user->abonne;
+
+            $factures = $abonne
+                ? $abonne->factures()->where('statut', '!=', 'Payée')->get()
+                : collect();
+        }
 
         return view('paiements.create', compact('factures'));
     }
@@ -36,8 +45,7 @@ class PaiementController extends Controller
      * Enregistrer un paiement et mettre à jour la facture associée
      *
      * Le montant n'est jamais pris depuis le formulaire : il est toujours
-     * recalculé côté serveur à partir de la facture choisie, pour éviter
-     * qu'un montant erroné ou falsifié soit enregistré.
+     * recalculé côté serveur à partir de la facture choisie.
      */
     public function payer(Request $request)
     {
@@ -47,8 +55,18 @@ class PaiementController extends Controller
         ]);
 
         $facture = Facture::findOrFail($request->facture_id);
+        $user = Auth::user();
 
-        if ($facture->statut === 'Payée' || $facture->statut === 'Payee') {
+        // Sécurité : un client ne peut payer QUE ses propres factures
+        if (!in_array($user->role, ['admin', 'agent'])) {
+            $abonne = $user->abonne;
+
+            if (!$abonne || $facture->abonne_id !== $abonne->id) {
+                return back()->with('error', 'Vous ne pouvez payer que vos propres factures.');
+            }
+        }
+
+        if ($facture->statut === 'Payée') {
             return back()->with('error', 'Cette facture a déjà été payée.');
         }
 
@@ -62,7 +80,7 @@ class PaiementController extends Controller
 
         $facture->update(['statut' => 'Payée']);
 
-        if (in_array(Auth::user()->role, ['admin', 'agent'])) {
+        if (in_array($user->role, ['admin', 'agent'])) {
             return redirect()
                 ->route('paiements.index')
                 ->with('success', 'Paiement enregistré avec succès');

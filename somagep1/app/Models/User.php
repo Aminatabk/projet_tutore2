@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Abonne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,7 +31,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Abonné associé à ce compte utilisateur.
+     * La fiche abonné liée à ce compte (pour les utilisateurs "client")
      */
     public function abonne()
     {

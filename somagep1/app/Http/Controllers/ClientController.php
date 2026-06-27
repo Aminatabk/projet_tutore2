@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Facture;
-use App\Models\Consommation;
-use App\Models\Reclamation;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -13,9 +11,13 @@ class ClientController extends Controller
      */
     public function factures()
     {
-        $factures = Facture::with('abonne')->latest()->get();
+        $abonne = Auth::user()->abonne;
 
-        return view('client.factures', compact('factures'));
+        $factures = $abonne
+            ? $abonne->factures()->with('consommation')->latest()->get()
+            : collect();
+
+        return view('client.factures', compact('factures', 'abonne'));
     }
 
     /**
@@ -23,9 +25,13 @@ class ClientController extends Controller
      */
     public function consommations()
     {
-        $consommations = Consommation::with('abonne')->latest()->get();
+        $abonne = Auth::user()->abonne;
 
-        return view('client.consommations', compact('consommations'));
+        $consommations = $abonne
+            ? $abonne->consommations()->latest()->get()
+            : collect();
+
+        return view('client.consommations', compact('consommations', 'abonne'));
     }
 
     /**
@@ -33,9 +39,13 @@ class ClientController extends Controller
      */
     public function reclamations()
     {
-        $reclamations = Reclamation::with('abonne')->latest()->get();
+        $abonne = Auth::user()->abonne;
 
-        return view('client.reclamations', compact('reclamations'));
+        $reclamations = $abonne
+            ? $abonne->reclamations()->latest()->get()
+            : collect();
+
+        return view('client.reclamations', compact('reclamations', 'abonne'));
     }
 
     /**
@@ -43,6 +53,8 @@ class ClientController extends Controller
      */
     public function profil()
     {
-        return view('client.profil');
+        $abonne = Auth::user()->abonne;
+
+        return view('client.profil', compact('abonne'));
     }
 }

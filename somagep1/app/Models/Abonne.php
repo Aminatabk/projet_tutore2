@@ -11,7 +11,8 @@ class Abonne extends Model
         'prenom',
         'adresse',
         'telephone',
-        'email'
+        'email',
+        'user_id',
     ];
 
     public function consommations()
@@ -27,5 +28,13 @@ class Abonne extends Model
     public function reclamations()
     {
         return $this->hasMany(Reclamation::class);
+    }
+
+    /**
+     * Le compte utilisateur lié à cet abonné (rôle "client")
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

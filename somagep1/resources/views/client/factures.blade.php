@@ -28,6 +28,19 @@
 
 </div>
 
+@if(!$abonne)
+
+    <div class="alert alert-warning rounded-3 shadow-sm">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        Votre compte n'est pas encore lié à une fiche abonné. Contactez l'administration
+        pour pouvoir consulter vos factures.
+
+    </div>
+
+@else
+
 <div class="card border-0 shadow rounded-4">
 
     <div class="card-header bg-white border-0">
@@ -74,7 +87,7 @@
 
                             <span class="fw-bold text-primary">
 
-                                #{{ $facture->id }}
+                                {{ $facture->numero_facture }}
 
                             </span>
 
@@ -92,13 +105,13 @@
 
                         <td>
 
-                            {{ \Carbon\Carbon::parse($facture->created_at)->format('d/m/Y') }}
+                            {{ \Carbon\Carbon::parse($facture->date_emission)->format('d/m/Y') }}
 
                         </td>
 
                         <td>
 
-                            @if(($facture->statut ?? '') == 'payee')
+                            @if($facture->statut == 'Payée')
 
                                 <span class="badge bg-success">
 
@@ -114,7 +127,7 @@
 
                                     <i class="bi bi-exclamation-circle-fill"></i>
 
-                                    Impayée
+                                    Non payée
 
                                 </span>
 
@@ -159,5 +172,7 @@
     </div>
 
 </div>
+
+@endif
 
 @endsection
