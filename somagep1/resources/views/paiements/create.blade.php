@@ -4,6 +4,14 @@
 
 <h2>Effectuer un Paiement</h2>
 
+@if($factures->isEmpty())
+
+    <div class="alert alert-warning">
+        Aucune facture en attente de paiement n'est disponible pour le moment.
+    </div>
+
+@else
+
 <form action="/paiement" method="POST">
 
     @csrf
@@ -13,12 +21,17 @@
         <label>Facture</label>
 
         <select name="facture_id"
-                class="form-control">
+                id="facture_id"
+                class="form-control"
+                required
+                onchange="document.getElementById('montant_affiche').value = this.options[this.selectedIndex].dataset.montant">
+
+            <option value="" disabled selected>-- Choisir une facture --</option>
 
             @foreach($factures as $facture)
 
-            <option value="{{ $facture->id }}">
-                {{ $facture->numero_facture }}
+            <option value="{{ $facture->id }}" data-montant="{{ $facture->montant }}">
+                {{ $facture->numero_facture }} - {{ $facture->abonne->nom ?? '' }} ({{ $facture->montant }} FCFA)
             </option>
 
             @endforeach
@@ -29,23 +42,30 @@
 
     <div class="mb-3">
 
-        <input type="number"
-               name="montant"
+        <label>Montant à payer</label>
+
+        <input type="text"
+               id="montant_affiche"
                class="form-control"
-               placeholder="Montant">
+               value=""
+               readonly
+               placeholder="Sélectionnez une facture">
 
     </div>
 
     <div class="mb-3">
 
-        <select name="mode"
-                class="form-control">
+        <label>Mode de paiement</label>
 
-            <option>
+        <select name="mode"
+                class="form-control"
+                required>
+
+            <option value="Orange Money">
                 Orange Money
             </option>
 
-            <option>
+            <option value="Moov Money">
                 Moov Money
             </option>
 
@@ -58,5 +78,7 @@
     </button>
 
 </form>
+
+@endif
 
 @endsection

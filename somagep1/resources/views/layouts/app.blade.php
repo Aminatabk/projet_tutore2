@@ -175,6 +175,11 @@ body{
         Paiements
     </a>
 
+    <a href="/statistiques">
+        <i class="bi bi-bar-chart-fill"></i>
+        Statistiques
+    </a>
+
 @else
 
     <a href="/mes-factures">
@@ -219,9 +224,6 @@ body{
 @csrf
 
 <button class="btn btn-light w-100 rounded-4 fw-bold py-2">
-    <i class="bi bi-box-arrow-right"></i>
-    Déconnexion
-</button>
     <i class="bi bi-box-arrow-right"></i>
     Déconnexion
 </button>
