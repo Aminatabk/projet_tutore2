@@ -28,6 +28,19 @@
 
 </div>
 
+@if(!$abonne)
+
+    <div class="alert alert-warning rounded-3 shadow-sm">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        Votre compte n'est pas encore lié à une fiche abonné. Contactez l'administration
+        pour accéder à vos factures, consommations et réclamations.
+
+    </div>
+
+@endif
+
 <div class="row g-4">
 
     <div class="col-md-4">
@@ -48,7 +61,7 @@
 
                         <h2 class="fw-bold">
 
-                            {{ App\Models\Facture::count() }}
+                            {{ $totalFactures }}
 
                         </h2>
 
@@ -86,7 +99,7 @@
 
                         <h2 class="fw-bold">
 
-                            {{ App\Models\Consommation::count() }}
+                            {{ $totalConsommations }}
 
                         </h2>
 
@@ -124,7 +137,7 @@
 
                         <h2 class="fw-bold">
 
-                            {{ App\Models\Reclamation::count() }}
+                            {{ $totalReclamations }}
 
                         </h2>
 
@@ -182,7 +195,7 @@
 
                     <tbody>
 
-                    @forelse(App\Models\Facture::latest()->take(5)->get() as $facture)
+                    @forelse($dernieresFactures as $facture)
 
                         <tr>
 
@@ -196,7 +209,7 @@
 
                             <td>
 
-                                @if($facture->statut == "payee")
+                                @if($facture->statut == 'Payée')
 
                                     <span class="badge bg-success">
 
@@ -208,7 +221,7 @@
 
                                     <span class="badge bg-danger">
 
-                                        Impayée
+                                        Non payée
 
                                     </span>
 

@@ -7,6 +7,30 @@ use Illuminate\Support\Facades\Auth;
 class ClientController extends Controller
 {
     /**
+     * Tableau de bord du client : uniquement ses propres données
+     */
+    public function dashboard()
+    {
+        $abonne = Auth::user()->abonne;
+
+        $totalFactures = $abonne ? $abonne->factures()->count() : 0;
+        $totalConsommations = $abonne ? $abonne->consommations()->count() : 0;
+        $totalReclamations = $abonne ? $abonne->reclamations()->count() : 0;
+
+        $dernieresFactures = $abonne
+            ? $abonne->factures()->latest()->take(5)->get()
+            : collect();
+
+        return view('client.dashboard', compact(
+            'abonne',
+            'totalFactures',
+            'totalConsommations',
+            'totalReclamations',
+            'dernieresFactures'
+        ));
+    }
+
+    /**
      * Mes factures
      */
     public function factures()

@@ -121,7 +121,70 @@
 
                 <hr class="my-5">
 
-                <div class="text-center">
+                @if($abonne)
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-droplet-fill text-primary"></i>
+                        Fiche abonné
+
+                    </h5>
+
+                    <div class="row gy-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Nom / Prénom
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{ $abonne->nom }} {{ $abonne->prenom }}
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-muted">
+                                Téléphone
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{ $abonne->telephone }}
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label class="form-label text-muted">
+                                Adresse
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{ $abonne->adresse }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                @else
+
+                    <div class="alert alert-warning rounded-3 shadow-sm">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        Votre compte n'est pas encore lié à une fiche abonné. Contactez
+                        l'administration pour accéder à toutes vos données (factures,
+                        consommations, réclamations).
+
+                    </div>
+
+                @endif
+
+                <div class="text-center mt-5">
 
                     <button class="btn btn-outline-primary px-4" disabled>
 

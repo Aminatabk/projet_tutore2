@@ -30,6 +30,19 @@
 
 </div>
 
+@if(!$abonne)
+
+    <div class="alert alert-warning rounded-3 shadow-sm">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        Votre compte n'est pas encore lié à une fiche abonné. Contactez l'administration
+        pour pouvoir envoyer ou consulter vos réclamations.
+
+    </div>
+
+@else
+
 <div class="card border-0 shadow rounded-4">
 
     <div class="card-header bg-white border-0">
@@ -164,5 +177,7 @@
     </div>
 
 </div>
+
+@endif
 
 @endsection

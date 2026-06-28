@@ -46,9 +46,7 @@ Route::get('/agent/dashboard', function () {
     return view('agent.dashboard');
 })->middleware(['auth', 'role:admin,agent']);
 
-Route::get('/client/dashboard', function () {
-    return view('client.dashboard');
-})->middleware('auth');
+Route::get('/client/dashboard', [ClientController::class, 'dashboard'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/mes-factures', [ClientController::class, 'factures'])->name('client.factures');
